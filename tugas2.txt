@@ -1,0 +1,58 @@
+--Penjelasan
+
+Pada Inner Join, Saya menggunakan Tabel untuk menggabungkan sebuah data yang berhubungan antara satu tabel dan tabel lainnya, dan disini kita menggabungkan data tabel dari kategori, materi, pengajar, peserta, dan penjadwalan_kelas.
+
+Nama tabel di aliaskan untuk mempersingkat tabel contohnya seperti ktgr = kategori, pgjr = pengajar, jdwl = Penjadwalan_kelas, mtr = materi, psrt = peserta.
+
+Dengan menggunakan query inner join kita disini bisa mendapatkan data data yang relevan antara gabungan dari beberapa tabel agar mudah di analisa dengan mudah singkat dan terstruktur
+
+--SYNTAK
+USE dbnfcom;
+
+INSERT INTO `kategori` (`id`, `nama`) 
+VALUES (null, 'Programming'), (null, 'Database'), (null, 'Networking');
+
+INSERT INTO `materi` (`id`, `kode`, `nama_materi`, `deskripsi`, `durasi`, `biaya`, `kategori_id`) 
+VALUES (null, 'MTR1', 'INTRO HTML', 'Pengenalan Bahasa HTML', '1', '30000', 1),
+(null, 'MTR2', 'INTRO MYSQL', 'Pengenalan MYSQL', '2', '20000', 2),
+(null, 'MTR3', 'INTRO MIKROTIK', 'Pengenalan Branding Jaringan MIKROTIK', '2', '10000', 3);
+
+INSERT INTO `pengajar` (`id`, `nip`, `nama`, `gender`, `telp`, `email`, `alamat`, `foto`, `materi_id`) VALUES 
+(NULL, '011111', 'Pa Sirojul Munir', 'L', '011111111', 'sirojul1@mail.com', 'Bogor', 'sirojul.png', 1), 
+(NULL, '022222', 'Pa Nasrul', 'L', '022222222', 'nasrul2@mail.com', 'Jakarta', 'nasrul.png', 2), 
+(NULL, '033333', 'Pa Lukman Rosyidi', 'L', '0333333333', 'lukman3@mail.com', 'Bandung', 'lukman.png', 3);
+
+
+INSERT INTO `peserta` (`id`, `nama`, `gender`, `telp`, `email`, `alamat`, `foto`, `materi_id`) VALUES 
+(NULL, 'Farid', 'L', '0121212112', 'farid@mail.com', 'Bogor', 'farid.png', 1), 
+(NULL, 'Ucup', 'L', '03232323232', 'ucup@mai.com', 'Kemang', 'ucup.png', 2), 
+(NULL, 'Jeje', 'P', '04343434343', 'jeje@mail.com', 'Depok', 'jeje.png', 3);
+
+INSERT INTO `penjadwalan_kelas` (`id`, `kode_kelas`, `kelas`, `hari`, `tgl_mulai`, `tgl_akhir`, `jam_mulai`, `jam_akhir`, `id_materi`, `id_pengajar`, `id_peserta`) VALUES 
+(NULL, 'K001', 'HTML 1', '2023-02-10', '2023-02-10', '2023-02-15', '07:00:00', '8:00:00', 1, 1, 1), 
+(NULL, 'K002', 'MYSQL 2', '2023-02-11', '2023-02-11', '2023-02-16', '07:00:00', '9:00:00', 2, 2, 2), 
+(NULL, 'K003', 'MKRTK 3', '2023-02-12', '2023-02-12', '2023-02-17', '07:00:00', '9:00:00', 3, 3, 3);
+
+
+SELECT * FROM kategori INNER JOIN materi ON kategori.id = materi.kategori_id;
+
+SELECT * FROM kategori INNER JOIN materi ON kategori.id = materi.id 
+INNER JOIN pengajar ON materi.id = pengajar.id 
+INNER JOIN peserta ON pengajar.id = peserta.id 
+INNER JOIN penjadwalan_kelas ON peserta.id = penjadwalan_kelas.id;
+
+SELECT * FROM kategori INNER JOIN materi ON kategori.id = materi.kategori_id 
+INNER JOIN pengajar ON materi.kode = pengajar.id 
+INNER JOIN peserta ON pengajar.nip = peserta.id 
+INNER JOIN penjadwalan_kelas ON peserta.id = penjadwalan_kelas.kode_kelas;
+
+SELECT * FROM kategori AS ktgr 
+INNER JOIN materi AS mtr ON ktgr.id = mtr.kategori_id 
+INNER JOIN pengajar AS pgjr ON mtr.id = pgjr.materi_id 
+INNER JOIN peserta AS psrt ON pgjr.id = psrt.materi_id 
+INNER JOIN penjadwalan_kelas AS jdwl ON psrt.materi_id = jdwl.id;
+
+
+
+
+
